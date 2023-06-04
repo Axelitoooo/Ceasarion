@@ -1,0 +1,28 @@
+{# templates/blog/search_results.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body_id 'blog_index' %}
+
+{% block main %}
+    <h1>Résultats de la recherche pour "{{ query }}"</h1>
+
+    {% if results is not empty %}
+        <ul>
+            {% for result in results %}
+                {{ include('blog/_search_results.html.twig', { 'result': result }) }}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="jumbotron">{{ 'post.no_posts_found'|trans }}</div>
+    {% endif %}
+
+    {# Pagination code here if needed #}
+{% endblock %}
+
+{% block sidebar %}
+    {{ parent() }}
+
+    {{ show_source_code(_self) }}
+    {{ include('blog/_rss.html.twig') }}
+{% endblock %}

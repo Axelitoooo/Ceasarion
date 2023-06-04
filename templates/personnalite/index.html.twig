@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Personnalités{% endblock %}
+
+{% block body_id 'personnalites_index' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a,
+        .pagination span {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 5px;
+            font-size: 22px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .pagination a:hover {
+            background-color: #eee;
+        }
+
+        .pagination .current-page {
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="personnalite-list">
+        {% for personnalite in pagerfanta %}
+            <div class="personnalite-item">
+                <h2>
+                    <a href="{{ path('personnalite_show', { 'id': personnalite.id }) }}">
+                        {{ personnalite.name }}
+                    </a>
+                </h2>
+                <p>{{ personnalite.description|striptags|slice(0, 150) ~ (personnalite.description|length > 150 ? '...' : '') }}</p>
+            </div>
+        {% else %}
+            <p>Aucune personnalité trouvée.</p>
+        {% endfor %}
+    </div>
+
+    {% if pagerfanta.hasPreviousPage or pagerfanta.hasNextPage %}
+        <div class="pagination">
+            {% if pagerfanta.hasPreviousPage %}
+                <a href="{{ path('personnalites_index', { 'page': pagerfanta.previousPage }) }}">Précédent</a>
+            {% endif %}
+
+            {% set currentPage = pagerfanta.getCurrentPage() %}
+            {% set totalPages = pagerfanta.getNbPages() %}
+            {% set pageRange = 3 %}
+
+            {% set startPage = currentPage - pageRange %}
+            {% if startPage < 1 %}
+                {% set startPage = 1 %}
+            {% endif %}
+
+            {% set endPage = currentPage + pageRange %}
+            {% if endPage > totalPages %}
+                {% set endPage = totalPages %}
+            {% endif %}
+
+            {% for page in range(startPage, endPage) %}
+                {% if page == currentPage %}
+                    <span class="current-page">{{ page }}</span>
+                {% else %}
+                    <a href="{{ path('personnalites_index', { 'page': page }) }}">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagerfanta.hasNextPage %}
+                <a href="{{ path('personnalites_index', { 'page': pagerfanta.nextPage }) }}">Suivant</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

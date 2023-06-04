@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="description-container">
+            <h1>{{ personnalite.name }}</h1>
+            <div class="description">{{ personnalite.description }}</div>
+        </div>
+        <div class="image-container">
+            <img src="{{ personnalite.imageURL }}" alt="{{ personnalite.name }}">
+        </div>
+        <div class="info-container">
+            <div class="info">
+                <h3>Date de naissance</h3>
+                <p>{{ personnalite.dateNaissance|date('d/m/Y') }}</p>
+            </div>
+            <div class="info">
+                <h3>Date de mort</h3>
+                <p>{{ personnalite.dateMort|date('d/m/Y') }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .description-container {
+            flex: 1;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .description {
+            margin-top: 20px;
+        }
+
+        .image-container {
+            margin-left: 40px;
+        }
+
+        .info-container {
+            margin-left: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+{% endblock %}

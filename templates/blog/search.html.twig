@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'blog_search' %}
+
+{% block main %}
+    <h1 style="margin-bottom: 20px;">Rechercher</h1>
+
+    <form action="{{ path('blog_search_results') }}" method="GET" id="searchForm">
+        <input type="text" name="query" placeholder="Rechercher..." id="searchInput" style="width: 400px; padding: 10px; border: 1px solid #ccc; border-radius: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <button type="submit" style="padding: 10px 20px; border: none; border-radius: 50px; background-color: #18BC9C; color: white;">Rechercher</button>
+    </form>
+
+    <div id="searchResults"></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            updateSearchResults();
+        });
+
+        function updateSearchResults() {
+            var query = document.getElementById('searchInput').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '{{ path('blog_search_results') }}?query=' + encodeURIComponent(query), true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById('searchResults').innerHTML = xhr.responseText;
+                }
+            };
+
+            xhr.send();
+        }
+    </script>
+{% endblock %}
